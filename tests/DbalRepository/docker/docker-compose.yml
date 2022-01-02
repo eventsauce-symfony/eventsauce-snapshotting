@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+    mysql:
+        build:
+            context: ./mysql
+        container_name: test_mysql
+        environment:
+            - MYSQL_DATABASE=test_snapshot
+            - MYSQL_USER=username
+            - MYSQL_PASSWORD=pswd
+            - MYSQL_ROOT_PASSWORD=pswd
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./database/data:/var/lib/mysql
