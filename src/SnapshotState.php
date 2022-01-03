@@ -12,7 +12,7 @@ final class SnapshotState
     private const CREATED_AT_FORMAT = 'Y-m-d H:i:s.uO';
 
     private function __construct(
-        public object $state,
+        public readonly object $state,
         public array $headers = []
     ){}
 
