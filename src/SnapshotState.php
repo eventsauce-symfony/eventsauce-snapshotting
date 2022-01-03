@@ -13,7 +13,7 @@ final class SnapshotState
     private const CREATED_AT_FORMAT = 'Y-m-d H:i:s.uO';
 
     /**
-     * @param array<string, int|string|array<mixed>|bool|float|null> $headers
+     * @param array<string, int|string|array<mixed>|bool|float> $headers
      */
     private function __construct(
         public readonly object $state,
@@ -63,7 +63,7 @@ final class SnapshotState
     }
 
     /**
-     * @param array<string, int|string|array<mixed>|bool|float|null> $headers
+     * @param array<string, int|string|array<mixed>|bool|float> $headers
      */
     public static function from(object $state, array $headers = []): self
     {

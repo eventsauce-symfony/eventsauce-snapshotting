@@ -44,7 +44,7 @@ final class ConstructingSnapshotStateSerializer implements SnapshotStateSerializ
         $className = $this->classNameInflector->typeToClassName($stateType);
         $event = $this->payloadSerializer->unserializePayload($className, $payload['payload']);
 
-        /** @var array<string, int|string|array<mixed>|bool|float|null> $headers */
+        /** @var array<string, int|string|array<mixed>|bool|float> $headers */
         $headers = $payload['headers'];
 
         return SnapshotState::from($event, $headers);
