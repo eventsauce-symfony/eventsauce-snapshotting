@@ -62,7 +62,7 @@ final class DoctrineDbalSnapshotRepository implements SnapshotRepository
         $state = $result['state'];
 
         try {
-            /** @var array $payload */
+            /** @var array<string, array<mixed>> $payload */
             $payload = json_decode($state, true, 512, JSON_THROW_ON_ERROR);
             $state = $this->serializer->unserialize($payload);
         } catch (Throwable) {

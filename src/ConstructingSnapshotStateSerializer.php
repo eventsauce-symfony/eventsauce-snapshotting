@@ -17,6 +17,9 @@ final class ConstructingSnapshotStateSerializer implements SnapshotStateSerializ
         private ClassNameInflector $classNameInflector
     ) {}
 
+    /**
+     * @return array<string, mixed>
+     */
     public function serialize(SnapshotState $state): array
     {
         $state = $state->withCreatedAt($this->clock->now());
@@ -31,11 +34,19 @@ final class ConstructingSnapshotStateSerializer implements SnapshotStateSerializ
         ];
     }
 
+    /**
+     * @param array<string, array<mixed>> $payload
+     */
     public function unserialize(array $payload): SnapshotState
     {
-        $className = $this->classNameInflector->typeToClassName($payload['headers'][Header::STATE_TYPE->value]);
+        /** @var string $stateType */
+        $stateType = $payload['headers'][Header::STATE_TYPE->value];
+        $className = $this->classNameInflector->typeToClassName($stateType);
         $event = $this->payloadSerializer->unserializePayload($className, $payload['payload']);
 
-        return SnapshotState::from($event, $payload['headers']);
+        /** @var array<string, int|string|array<mixed>|bool|float|null> $headers */
+        $headers = $payload['headers'];
+
+        return SnapshotState::from($event, $headers);
     }
 }
