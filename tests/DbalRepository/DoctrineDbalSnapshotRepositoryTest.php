@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\DbalRepository;
 
+use Andreo\EventSauce\Snapshotting\ConstructingSnapshotStateSerializer;
+use Andreo\EventSauce\Snapshotting\DoctrineDbalSnapshotRepository;
+use Andreo\EventSauce\Snapshotting\SnapshotState;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 use EventSauce\Clock\SystemClock;
-use Andreo\EventSauce\Snapshotting\ConstructingSnapshotStateSerializer;
-use Andreo\EventSauce\Snapshotting\DoctrineDbalSnapshotRepository;
-use Andreo\EventSauce\Snapshotting\SnapshotState;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\DotSeparatedSnakeCaseInflector;
 use EventSauce\EventSourcing\Serialization\ConstructingPayloadSerializer;

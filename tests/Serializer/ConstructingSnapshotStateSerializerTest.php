@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Serializer;
 
-use EventSauce\Clock\SystemClock;
 use Andreo\EventSauce\Snapshotting\ConstructingSnapshotStateSerializer;
 use Andreo\EventSauce\Snapshotting\Header;
 use Andreo\EventSauce\Snapshotting\SnapshotState;
 use Andreo\EventSauce\Snapshotting\SnapshotStateSerializer;
+use EventSauce\Clock\SystemClock;
 use EventSauce\EventSourcing\DotSeparatedSnakeCaseInflector;
 use EventSauce\EventSourcing\Serialization\ConstructingPayloadSerializer;
 use PHPUnit\Framework\TestCase;
