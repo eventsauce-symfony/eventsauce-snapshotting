@@ -1,6 +1,6 @@
 {
     "name": "andreo/eventsauce-snapshotting",
-    "description": "Extended event sauce snapshot components.",
+    "description": "Extended EventSauce snapshot components.",
     "keywords": [
         "eventsauce",
         "components",
@@ -22,7 +22,7 @@
     },
     "require-dev": {
         "eventsauce/test-utilities": "dev-main",
-        "phpstan/phpstan": "1.3.x-dev",
+        "phpstan/phpstan": "^1.3",
         "phpunit/phpunit": "^9.4",
         "roave/security-advisories": "dev-latest"
     },
