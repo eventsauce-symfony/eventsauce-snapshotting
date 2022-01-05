@@ -23,7 +23,7 @@ services:
         depends_on:
             - mysql
         volumes:
-            - ../../:/var/library/src:rw
+            - ../../:/var/library:rw
         networks:
             - default
 networks:
