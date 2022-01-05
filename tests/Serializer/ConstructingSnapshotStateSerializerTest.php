@@ -18,7 +18,7 @@ final class ConstructingSnapshotStateSerializerTest extends TestCase
     /**
      * @test
      */
-    public function state_serialized_and_unserialized(): void
+    public function state_serialized_and_deserialized(): void
     {
         $dummyState = new StateStub('foo', 'bar');
         $snapshotState = SnapshotState::from($dummyState);
