@@ -1,2 +1,2 @@
 # eventsauce-snapshotting
-Extended EventSauce snapshot components
+Extended snapshot components of the EventSauce
