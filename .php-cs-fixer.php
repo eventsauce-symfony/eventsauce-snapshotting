@@ -1,12 +1,14 @@
 <?php
 
 use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
 
-$finder = PhpCsFixer\Finder::create()
+$finder = Finder::create()
     ->in([
         __DIR__.'/src/',
         __DIR__.'/tests/'
     ])
+    ->exclude(['docker'])
 ;
 
 return (new Config())

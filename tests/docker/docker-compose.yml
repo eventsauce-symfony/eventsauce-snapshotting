@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+    mysql:
+        build:
+            context: ./mysql
+        container_name: eventsauce_snapshot_mysql
+        environment:
+            - MYSQL_DATABASE=eventsauce_snapshot
+            - MYSQL_USER=username
+            - MYSQL_PASSWORD=pswd
+            - MYSQL_ROOT_PASSWORD=pswd
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./database/data:/var/lib/mysql
+        networks:
+            - default
+    php:
+        build:
+            context: ./php8
+        container_name: eventsauce_snapshot_php
+        depends_on:
+            - mysql
+        volumes:
+            - ../../:/var/library/src:rw
+        networks:
+            - default
+networks:
+    default:

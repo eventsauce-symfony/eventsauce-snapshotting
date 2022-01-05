@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\DbalRepository;
 
+use Andreo\EventSauce\Doctrine\Migration\SnapshotSchemaBuilder;
 use Andreo\EventSauce\Snapshotting\ConstructingSnapshotStateSerializer;
 use Andreo\EventSauce\Snapshotting\DoctrineDbalSnapshotRepository;
 use Andreo\EventSauce\Snapshotting\SnapshotState;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 use EventSauce\Clock\SystemClock;
 use EventSauce\EventSourcing\AggregateRootId;
@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 final class DoctrineDbalSnapshotRepositoryTest extends TestCase
 {
-    private string $tableName = 'snapshot';
+    private const TABLE_NAME = 'snapshot';
 
     private AggregateRootId $aggregateRootId;
 
@@ -64,64 +64,35 @@ final class DoctrineDbalSnapshotRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
+        $snapshotSchemaBuilder = new SnapshotSchemaBuilder();
         $this->aggregateRootId = DummyAggregateId::create();
         $this->connection = DriverManager::getConnection(
             [
-                'dbname' => 'test_snapshot',
+                'dbname' => 'eventsauce_snapshot',
                 'user' => 'username',
                 'password' => 'pswd',
-                'host' => '127.0.0.1',
+                'host' => 'mysql',
                 'port' => 3306,
                 'driver' => 'pdo_mysql',
             ]
         );
 
         $schemaManager = $this->connection->createSchemaManager();
-        if ($schemaManager->tablesExist($this->tableName)) {
-            $this->connection->executeQuery('TRUNCATE TABLE `' . $this->tableName . '`');
+        if ($schemaManager->tablesExist(self::TABLE_NAME)) {
+            $this->connection->executeQuery('TRUNCATE TABLE `' . self::TABLE_NAME . '`');
         } else {
-            $sql = $this->createSnapshotTableQuery($this->connection);
+            $snapshotSchema = $snapshotSchemaBuilder->build(self::TABLE_NAME, Types::BINARY);
+            $sql = $snapshotSchema->toSql($this->connection->getDatabasePlatform());
+
             $this->connection->executeQuery($sql[0]);
         }
-    }
-
-    private function createSnapshotTableQuery(Connection $connection): array
-    {
-        $tableSchema = new Schema();
-        $table = $tableSchema->createTable($this->tableName);
-        $table->addColumn('id', Types::INTEGER, [
-            'length' => 20,
-            'unsigned' => true,
-            'autoincrement' => true,
-        ]);
-        $table->addColumn('aggregate_root_id', Types::BINARY, [
-            'length' => 16,
-            'fixed' => true,
-        ]);
-        $table->addColumn('aggregate_root_version', Types::INTEGER, [
-            'length' => 20,
-            'unsigned' => true,
-        ]);
-        $table->addColumn('state', Types::STRING, [
-            'length' => 16001,
-        ]);
-        $table->setPrimaryKey(['id']);
-        $table->addIndex(
-            ['aggregate_root_id', 'aggregate_root_version'],
-            'last'
-        );
-        $table->addOption('charset', 'utf8mb4');
-        $table->addOption('collation', 'utf8mb4_general_ci');
-
-        return $tableSchema->toSql($connection->getDatabasePlatform());
     }
 
     private function repository(): DoctrineDbalSnapshotRepository
     {
         return new DoctrineDbalSnapshotRepository(
             $this->connection,
-            $this->tableName,
+            self::TABLE_NAME,
             new ConstructingSnapshotStateSerializer(
                 new ConstructingPayloadSerializer(),
                 new SystemClock(),
