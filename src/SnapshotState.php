@@ -6,7 +6,8 @@ declare(strict_types=1);
 namespace Andreo\EventSauce\Snapshotting;
 
 use DateTimeImmutable;
-use function assert, is_int;
+use function assert;
+use function is_int;
 
 final class SnapshotState
 {
