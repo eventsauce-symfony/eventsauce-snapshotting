@@ -1,6 +1,6 @@
 {
     "name": "andreo/eventsauce-snapshotting",
-    "description": "Extended EventSauce snapshot components.",
+    "description": "Extended snapshot components of the EventSauce.",
     "keywords": [
         "eventsauce",
         "components",
