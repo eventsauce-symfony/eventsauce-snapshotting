@@ -6,8 +6,6 @@ declare(strict_types=1);
 namespace Andreo\EventSauce\Snapshotting;
 
 use DateTimeImmutable;
-use function assert;
-use function is_int;
 
 final class SnapshotState
 {
@@ -44,8 +42,8 @@ final class SnapshotState
 
     public function schemaVersion(): int|string
     {
+        /** @var int|string $version */
         $version = $this->headers[Header::SCHEMA_VERSION->value];
-        assert(is_int($version) || is_string($version));
 
         return $version;
     }
