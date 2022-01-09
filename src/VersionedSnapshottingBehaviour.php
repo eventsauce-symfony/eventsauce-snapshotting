@@ -32,7 +32,7 @@ trait VersionedSnapshottingBehaviour
         $state = $snapshot->state();
         assert($state instanceof SnapshotState);
 
-        /** @var static&AggregateRoot $aggregateRoot */
+        /** @var static&AggregateRootWithVersionedSnapshotting $aggregateRoot */
         $aggregateRoot = static::reconstituteFromSnapshotState($id, $state->state);
         $aggregateRoot->aggregateRootVersion = $snapshot->aggregateRootVersion();
 
