@@ -42,10 +42,10 @@ final class SnapshotState
         return $clone;
     }
 
-    public function schemaVersion(): int
+    public function schemaVersion(): int|string
     {
         $version = $this->headers[Header::SCHEMA_VERSION->value];
-        assert(is_int($version));
+        assert(is_int($version) || is_string($version));
 
         return $version;
     }
