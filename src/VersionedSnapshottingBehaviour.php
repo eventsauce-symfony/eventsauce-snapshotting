@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting;
 
-use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\Snapshotting\Snapshot;
 use EventSauce\EventSourcing\Snapshotting\SnapshottingBehaviour;
 use Generator;

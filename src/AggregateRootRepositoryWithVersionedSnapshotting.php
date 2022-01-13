@@ -22,7 +22,7 @@ use function assert;
 final class AggregateRootRepositoryWithVersionedSnapshotting implements AggregateRootRepositoryWithSnapshotting
 {
     /**
-     * @param class-string<AggregateRootWithVersionedSnapshotting> $aggregateRootClassName
+     * @param class-string<AggregateRootWithVersionedSnapshotting>            $aggregateRootClassName
      * @param AggregateRootRepository<AggregateRootWithVersionedSnapshotting> $regularRepository
      */
     public function __construct(
@@ -30,7 +30,8 @@ final class AggregateRootRepositoryWithVersionedSnapshotting implements Aggregat
         private MessageRepository $messageRepository,
         private SnapshotRepository $snapshotRepository,
         private AggregateRootRepository $regularRepository
-    ) {}
+    ) {
+    }
 
     public function retrieveFromSnapshot(AggregateRootId $aggregateRootId): object
     {

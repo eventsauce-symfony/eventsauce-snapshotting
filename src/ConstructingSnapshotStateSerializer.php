@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\EventSauce\Snapshotting;
 
 use EventSauce\Clock\Clock;
@@ -15,7 +14,8 @@ final class ConstructingSnapshotStateSerializer implements SnapshotStateSerializ
         private PayloadSerializer $payloadSerializer,
         private Clock $clock,
         private ClassNameInflector $classNameInflector
-    ) {}
+    ) {
+    }
 
     /**
      * @return array<string, mixed>

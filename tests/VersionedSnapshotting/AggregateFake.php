@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Tests\VersionedSnapshotting;
 
 use Andreo\EventSauce\Snapshotting\AggregateRootWithVersionedSnapshotting;

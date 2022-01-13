@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\EventSauce\Snapshotting;
 
 use DateTimeImmutable;
@@ -17,7 +16,8 @@ final class SnapshotState
     private function __construct(
         public readonly object $state,
         public array $headers = []
-    ){}
+    ) {
+    }
 
     public function withCreatedAt(DateTimeImmutable $createdAt): self
     {

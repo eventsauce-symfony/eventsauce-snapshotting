@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Andreo\EventSauce\Snapshotting;
 
 use Doctrine\DBAL\Connection;
@@ -13,13 +12,14 @@ use EventSauce\UuidEncoding\UuidEncoder;
 use Throwable;
 
 final class DoctrineDbalSnapshotRepository implements SnapshotRepository
-{    
+{
     public function __construct(
         private Connection $connection,
         private string $tableName,
         private SnapshotStateSerializer $serializer,
         private UuidEncoder $uuidEncoder
-    ) {}
+    ) {
+    }
 
     public function persist(Snapshot $snapshot): void
     {

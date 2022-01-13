@@ -19,7 +19,8 @@ final class AggregateRootRepositoryWithSnapshottingAndStoreStrategy implements A
     public function __construct(
         private AggregateRootRepositoryWithSnapshotting $regularRepository,
         private CanStoreSnapshotStrategy $canStoreSnapshotStrategy
-    ) {}
+    ) {
+    }
 
     public function retrieveFromSnapshot(AggregateRootId $aggregateRootId): object
     {

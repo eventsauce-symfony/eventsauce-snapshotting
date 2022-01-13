@@ -102,8 +102,7 @@ final class AggregateSnapshottingEveryNEventTest extends AggregateRootTestCase
         MessageRepository $repository,
         MessageDispatcher $dispatcher,
         MessageDecorator $decorator
-    ): AggregateRootRepository
-    {
+    ): AggregateRootRepository {
         $this->snapshotRepository = new InMemorySnapshotRepository();
 
         $regularRepository = new ConstructingAggregateRootRepositoryWithSnapshotting(

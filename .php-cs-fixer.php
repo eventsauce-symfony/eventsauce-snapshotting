@@ -13,6 +13,7 @@ $finder = Finder::create()
 
 return (new Config())
     ->setRules([
+        '@Symfony' => true,
         'strict_param' => true,
         'array_syntax' => ['syntax' => 'short'],
         'concat_space' => ['spacing' => 'one'],

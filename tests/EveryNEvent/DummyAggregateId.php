@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-
 namespace Tests\EveryNEvent;
-
 
 use EventSauce\EventSourcing\AggregateRootId;
 use Ramsey\Uuid\Uuid;
 
 class DummyAggregateId implements AggregateRootId
 {
-    private function __construct(private string $id) {}
+    private function __construct(private string $id)
+    {
+    }
 
     public function toString(): string
     {

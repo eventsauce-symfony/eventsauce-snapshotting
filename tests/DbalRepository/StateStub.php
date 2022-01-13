@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Tests\DbalRepository;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;

@@ -63,8 +63,7 @@ final class AggregateVersionedSnapshottingTest extends AggregateRootTestCase
         MessageRepository $repository,
         MessageDispatcher $dispatcher,
         MessageDecorator $decorator
-    ): AggregateRootRepository
-    {
+    ): AggregateRootRepository {
         $this->snapshotRepository = new InMemorySnapshotRepository();
 
         return new AggregateRootRepositoryWithVersionedSnapshotting(
