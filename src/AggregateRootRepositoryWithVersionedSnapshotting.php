@@ -45,7 +45,7 @@ final class AggregateRootRepositoryWithVersionedSnapshotting implements Aggregat
         $state = $snapshot->state();
         assert($state instanceof SnapshotState);
 
-        /** @var class-string<AggregateRootWithVersionedSnapshotting> $className */
+        /** @var class-string<T> $className */
         $className = $this->aggregateRootClassName;
         if ($className::getSnapshotVersion() !== $state->schemaVersion()) {
             return $this->retrieve($aggregateRootId);
