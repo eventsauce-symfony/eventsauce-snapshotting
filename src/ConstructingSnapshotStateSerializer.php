@@ -18,7 +18,7 @@ final class ConstructingSnapshotStateSerializer implements SnapshotStateSerializ
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, array<mixed>>
      */
     public function serialize(SnapshotState $state): array
     {

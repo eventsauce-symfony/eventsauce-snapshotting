@@ -17,13 +17,15 @@ use Generator;
 use function assert;
 
 /**
- * @implements AggregateRootRepositoryWithSnapshotting<AggregateRootWithVersionedSnapshotting>
+ * @template T of AggregateRootWithVersionedSnapshotting
+ *
+ * @implements AggregateRootRepositoryWithSnapshotting<T>
  */
 final class AggregateRootRepositoryWithVersionedSnapshotting implements AggregateRootRepositoryWithSnapshotting
 {
     /**
-     * @param class-string<AggregateRootWithVersionedSnapshotting>            $aggregateRootClassName
-     * @param AggregateRootRepository<AggregateRootWithVersionedSnapshotting> $regularRepository
+     * @param class-string<T>            $aggregateRootClassName
+     * @param AggregateRootRepository<T> $regularRepository
      */
     public function __construct(
         private string $aggregateRootClassName,
@@ -79,11 +81,17 @@ final class AggregateRootRepositoryWithVersionedSnapshotting implements Aggregat
         return $messages->getReturn();
     }
 
+    /**
+     * @return T
+     */
     public function retrieve(AggregateRootId $aggregateRootId): object
     {
         return $this->regularRepository->retrieve($aggregateRootId);
     }
 
+    /**
+     * @param T $aggregateRoot
+     */
     public function persist(object $aggregateRoot): void
     {
         $this->regularRepository->persist($aggregateRoot);

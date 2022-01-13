@@ -9,12 +9,14 @@ use EventSauce\EventSourcing\Snapshotting\AggregateRootRepositoryWithSnapshottin
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 
 /**
- * @implements AggregateRootRepositoryWithSnapshotting<AggregateRootWithSnapshotting>
+ * @template T of AggregateRootWithSnapshotting
+ *
+ * @implements AggregateRootRepositoryWithSnapshotting<T>
  */
 final class AggregateRootRepositoryWithSnapshottingAndStoreStrategy implements AggregateRootRepositoryWithSnapshotting
 {
     /**
-     * @param AggregateRootRepositoryWithSnapshotting<AggregateRootWithSnapshotting> $regularRepository
+     * @param AggregateRootRepositoryWithSnapshotting<T> $regularRepository
      */
     public function __construct(
         private AggregateRootRepositoryWithSnapshotting $regularRepository,
@@ -34,11 +36,17 @@ final class AggregateRootRepositoryWithSnapshottingAndStoreStrategy implements A
         }
     }
 
+    /**
+     * @return T
+     */
     public function retrieve(AggregateRootId $aggregateRootId): object
     {
         return $this->regularRepository->retrieve($aggregateRootId);
     }
 
+    /**
+     * @param T $aggregateRoot
+     */
     public function persist(object $aggregateRoot): void
     {
         $this->regularRepository->persist($aggregateRoot);
