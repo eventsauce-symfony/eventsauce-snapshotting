@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\DbalRepository;
+namespace Tests\DoctrineRepository;
 
 use Andreo\EventSauce\Doctrine\Migration\SnapshotSchemaBuilder;
 use Andreo\EventSauce\Snapshotting\ConstructingSnapshotStateSerializer;
-use Andreo\EventSauce\Snapshotting\DoctrineDbalSnapshotRepository;
+use Andreo\EventSauce\Snapshotting\DoctrineSnapshotRepository;
 use Andreo\EventSauce\Snapshotting\SnapshotState;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -19,7 +19,7 @@ use EventSauce\EventSourcing\Snapshotting\Snapshot;
 use EventSauce\UuidEncoding\BinaryUuidEncoder;
 use PHPUnit\Framework\TestCase;
 
-final class DoctrineDbalSnapshotRepositoryTest extends TestCase
+final class DoctrineSnapshotRepositoryTest extends TestCase
 {
     private const TABLE_NAME = 'snapshot';
 
@@ -51,13 +51,13 @@ final class DoctrineDbalSnapshotRepositoryTest extends TestCase
                 ),
                 new Snapshot(
                     $this->aggregateRootId,
-                    2,
-                    SnapshotState::from(new StateStub('bar'))
+                    3,
+                    SnapshotState::from(new StateStub('baz'))
                 ),
                 new Snapshot(
                     $this->aggregateRootId,
-                    3,
-                    SnapshotState::from(new StateStub('baz'))
+                    2,
+                    SnapshotState::from(new StateStub('bar'))
                 ),
         ];
     }
@@ -88,9 +88,9 @@ final class DoctrineDbalSnapshotRepositoryTest extends TestCase
         }
     }
 
-    private function repository(): DoctrineDbalSnapshotRepository
+    private function repository(): DoctrineSnapshotRepository
     {
-        return new DoctrineDbalSnapshotRepository(
+        return new DoctrineSnapshotRepository(
             $this->connection,
             self::TABLE_NAME,
             new ConstructingSnapshotStateSerializer(

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\DbalRepository;
+namespace Tests\DoctrineRepository;
 
 use EventSauce\EventSourcing\AggregateRootId;
 use Ramsey\Uuid\Uuid;
