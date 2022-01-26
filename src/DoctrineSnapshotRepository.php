@@ -11,7 +11,7 @@ use EventSauce\EventSourcing\Snapshotting\SnapshotRepository;
 use EventSauce\UuidEncoding\UuidEncoder;
 use Throwable;
 
-final class DoctrineDbalSnapshotRepository implements SnapshotRepository
+final class DoctrineSnapshotRepository implements SnapshotRepository
 {
     public function __construct(
         private Connection $connection,
