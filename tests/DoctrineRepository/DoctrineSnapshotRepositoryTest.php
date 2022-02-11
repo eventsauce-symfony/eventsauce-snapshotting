@@ -30,7 +30,7 @@ final class DoctrineSnapshotRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function repository_persist_and_retrieve_last_snapshot(): void
+    public function should_persist_and_retrieve_newest_snapshot(): void
     {
         $repository = $this->repository();
         foreach ($this->snapshots() as $snapshot) {

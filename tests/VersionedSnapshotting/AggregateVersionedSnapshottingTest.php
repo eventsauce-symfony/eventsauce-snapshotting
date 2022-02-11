@@ -27,7 +27,7 @@ final class AggregateVersionedSnapshottingTest extends AggregateRootTestCase
     /**
      * @test
      */
-    public function repository_filters_deprecated_snapshot(): void
+    public function should_filter_out_outdated_snapshot(): void
     {
         $this->repository->storeSnapshot(DeprecatedAggregateFake::create($this->aggregateRootId));
         $snapshot = $this->snapshotRepository->retrieve($this->aggregateRootId);

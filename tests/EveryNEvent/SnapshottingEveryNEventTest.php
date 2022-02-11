@@ -16,7 +16,7 @@ use EventSauce\EventSourcing\Snapshotting\ConstructingAggregateRootRepositoryWit
 use EventSauce\EventSourcing\Snapshotting\InMemorySnapshotRepository;
 use EventSauce\EventSourcing\TestUtilities\AggregateRootTestCase;
 
-final class AggregateSnapshottingEveryNEventTest extends AggregateRootTestCase
+final class SnapshottingEveryNEventTest extends AggregateRootTestCase
 {
     protected InMemorySnapshotRepository $snapshotRepository;
 
@@ -30,7 +30,7 @@ final class AggregateSnapshottingEveryNEventTest extends AggregateRootTestCase
     /**
      * @test
      */
-    public function snapshot_is_not_stored_if_number_of_events_is_not_match(): void
+    public function should_not_store_snapshot_if_number_of_event_is_less_than_declared(): void
     {
         $this->given(
             new AggregateNumberIncremented(1),
@@ -53,7 +53,7 @@ final class AggregateSnapshottingEveryNEventTest extends AggregateRootTestCase
     /**
      * @test
      */
-    public function snapshot_is_stored_if_number_of_events_is_match(): void
+    public function should_store_snapshot_if_number_of_event_is_equals_declared(): void
     {
         $this->given(
             new AggregateNumberIncremented(1),
