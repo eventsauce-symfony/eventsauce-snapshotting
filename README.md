@@ -26,7 +26,6 @@ database by doctrine.
 
 ```php
 use Andreo\EventSauce\Snapshotting\DoctrineSnapshotRepository;
-use EventSauce\EventSourcing\Snapshotting\ConstructingAggregateRootRepositoryWithSnapshotting;
 
 new DoctrineSnapshotRepository(
     connection: $connection, // Doctrine\DBAL\Connection
@@ -80,7 +79,7 @@ final class SomeAggregate implements AggregateRootWithVersionedSnapshotting
 
     public static function getSnapshotVersion(): int|string
     {
-        return 'v2';
+        return 2;
     }
     
     protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting
