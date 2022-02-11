@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting;
 
-use Andreo\EventSauce\Snapshotting\Exception\InvalidArgumentException;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\AggregateRootRepository;
 use EventSauce\EventSourcing\Message;
@@ -35,6 +34,9 @@ final class AggregateRootRepositoryWithVersionedSnapshotting implements Aggregat
     ) {
     }
 
+    /**
+     * @return T
+     */
     public function retrieveFromSnapshot(AggregateRootId $aggregateRootId): object
     {
         $snapshot = $this->snapshotRepository->retrieve($aggregateRootId);
@@ -56,11 +58,12 @@ final class AggregateRootRepositoryWithVersionedSnapshotting implements Aggregat
         return $className::reconstituteFromSnapshotAndEvents($snapshot, $events);
     }
 
+    /**
+     * @param T $aggregateRoot
+     */
     public function storeSnapshot(AggregateRootWithSnapshotting $aggregateRoot): void
     {
-        if (!$aggregateRoot instanceof AggregateRootWithVersionedSnapshotting) {
-            throw InvalidArgumentException::aggregateMustBeVersioned();
-        }
+        assert($aggregateRoot instanceof AggregateRootWithVersionedSnapshotting, 'Expected $aggregateRoot to be an instance of ' . AggregateRootWithVersionedSnapshotting::class);
 
         $snapshot = $aggregateRoot->createSnapshot();
         $this->snapshotRepository->persist($snapshot);

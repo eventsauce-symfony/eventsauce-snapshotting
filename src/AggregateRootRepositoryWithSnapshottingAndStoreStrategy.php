@@ -29,6 +29,9 @@ final class AggregateRootRepositoryWithSnapshottingAndStoreStrategy implements A
         return $this->regularRepository->retrieveFromSnapshot($aggregateRootId);
     }
 
+    /**
+     * @param T $aggregateRoot
+     */
     public function storeSnapshot(AggregateRootWithSnapshotting $aggregateRoot): void
     {
         if ($this->canStoreSnapshotStrategy->canStore($aggregateRoot)) {
