@@ -9,6 +9,11 @@ use EventSauce\EventSourcing\Snapshotting\SnapshottingBehaviour;
 use Generator;
 use function assert;
 
+/**
+ * T of AggregateRootWithVersionedSnapshotting.
+ *
+ * @template T
+ */
 trait VersionedSnapshottingBehaviour
 {
     use SnapshottingBehaviour;
@@ -25,13 +30,16 @@ trait VersionedSnapshottingBehaviour
         );
     }
 
+    /**
+     * @return T
+     */
     public static function reconstituteFromSnapshotAndEvents(Snapshot $snapshot, Generator $events): static
     {
         $id = $snapshot->aggregateRootId();
         $state = $snapshot->state();
         assert($state instanceof SnapshotState);
 
-        /** @var static&AggregateRootWithVersionedSnapshotting $aggregateRoot */
+        /** @var T $aggregateRoot */
         $aggregateRoot = static::reconstituteFromSnapshotState($id, $state->state);
         $aggregateRoot->aggregateRootVersion = $snapshot->aggregateRootVersion();
 
