@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting;
 
+use Andreo\EventSauce\Snapshotting\Exception\UnableToPersistSnapshotException;
+use Andreo\EventSauce\Snapshotting\Exception\UnableToRetrieveSnapshotException;
 use Doctrine\DBAL\Connection;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\Snapshot;
@@ -31,14 +33,18 @@ final class DoctrineSnapshotRepository implements SnapshotRepository
 
         $payload = $this->serializer->serialize($state);
 
-        $this->connection->insert(
-            $this->tableName,
-            [
-                'aggregate_root_id' => $this->uuidEncoder->encodeString($snapshot->aggregateRootId()->toString()),
-                'aggregate_root_version' => $snapshot->aggregateRootVersion(),
-                'state' => json_encode($payload, JSON_THROW_ON_ERROR),
-            ]
-        );
+        try {
+            $this->connection->insert(
+                $this->tableName,
+                [
+                    'aggregate_root_id' => $this->uuidEncoder->encodeString($snapshot->aggregateRootId()->toString()),
+                    'aggregate_root_version' => $snapshot->aggregateRootVersion(),
+                    'state' => json_encode($payload, JSON_THROW_ON_ERROR),
+                ]
+            );
+        } catch (Throwable $exception) {
+            throw UnableToPersistSnapshotException::dueTo(previous: $exception);
+        }
     }
 
     public function retrieve(AggregateRootId $id): ?Snapshot
@@ -53,9 +59,14 @@ final class DoctrineSnapshotRepository implements SnapshotRepository
             ->setParameter('aggregate_root_id', $this->uuidEncoder->encodeString($id->toString()))
         ;
 
-        if (false === $result = $builder->executeQuery()->fetchAssociative()) {
-            return null;
+        try {
+            if (false === $result = $builder->executeQuery()->fetchAssociative()) {
+                return null;
+            }
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveSnapshotException::dueTo(previous: $exception);
         }
+
         /** @var int $aggregateRootVersion */
         $aggregateRootVersion = $result['aggregate_root_version'];
         /** @var string $state */
