@@ -8,7 +8,7 @@ use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 
 final class EveryNEventCanStoreSnapshotStrategy implements CanStoreSnapshotStrategy
 {
-    public function __construct(private int $numberOfEvents)
+    public function __construct(private int $numberOfEvents = 100)
     {
     }
 

@@ -121,6 +121,6 @@ use Andreo\EventSauce\Snapshotting\EveryNEventCanStoreSnapshotStrategy;
 
 new AggregateRootRepositoryWithSnapshottingAndStoreStrategy(
     regularRepository: $regularRepository, // EventSauce\EventSourcing\Snapshotting\AggregateRootRepositoryWithSnapshotting
-    canStoreSnapshotStrategy: new EveryNEventCanStoreSnapshotStrategy() // or other implementation of Andreo\EventSauce\Snapshotting\CanStoreSnapshotStrategy
+    canStoreSnapshotStrategy: new EveryNEventCanStoreSnapshotStrategy(numberOfEvents: 200) // or other implementation of Andreo\EventSauce\Snapshotting\CanStoreSnapshotStrategy
 );
 ```
