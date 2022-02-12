@@ -1,6 +1,6 @@
 ## eventsauce-snapshotting
 
-Extended snapshot components of the EventSauce
+Extended snapshot components for EventSauce
 
 [About Snapshotting](https://eventsauce.io/docs/snapshotting/)
 
