@@ -70,7 +70,7 @@ final class SomeAggregate implements AggregateRootWithVersionedSnapshotting
 
     /**
      *  If you change the snapshot model, 
-     *  remember to change version
+     *  remember to up version
      */
     protected function createSnapshotState(): SnapshotStateV2
     {
