@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\VersionedSnapshotting;
+namespace Tests\VersionedWithAppliesByAttribute;
 
 use Andreo\EventSauce\Snapshotting\AggregateRootRepositoryWithVersionedSnapshotting;
-use Andreo\EventSauce\Snapshotting\SnapshotState;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\AggregateRootRepository;
 use EventSauce\EventSourcing\EventSourcedAggregateRootRepository;
@@ -27,17 +26,9 @@ final class AggregateVersionedSnapshottingTest extends AggregateRootTestCase
     /**
      * @test
      */
-    public function should_filter_out_outdated_snapshot(): void
+    public function should_retrieve_aggregate_with_applies_by_attribute(): void
     {
-        $this->repository->storeSnapshot(DeprecatedAggregateFake::create($this->aggregateRootId));
-        $snapshot = $this->snapshotRepository->retrieve($this->aggregateRootId);
-        /** @var SnapshotState $snapshotState */
-        $snapshotState = $snapshot->state();
-        /** @var DeprecatedStateStub $state */
-        $state = $snapshotState->state;
-        $this->assertInstanceOf(DeprecatedStateStub::class, $state);
-        $this->assertEquals(1, $snapshotState->schemaVersion());
-        $this->assertEquals('deprecated', $state->value);
+        $this->repository->storeSnapshot(AggregateFake::create($this->aggregateRootId));
 
         /** @var AggregateFake $aggregate */
         $aggregate = $this->repository->retrieveFromSnapshot($this->aggregateRootId);

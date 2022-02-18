@@ -10,7 +10,7 @@ use Generator;
 use function assert;
 
 /**
- * T of AggregateRootWithVersionedSnapshotting
+ * T of AggregateRootWithVersionedSnapshotting.
  *
  * @template T
  */

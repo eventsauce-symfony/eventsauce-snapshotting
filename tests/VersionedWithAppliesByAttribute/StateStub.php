@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\VersionedSnapshotting;
+namespace Tests\VersionedWithAppliesByAttribute;
 
-final class DeprecatedStateStub
+final class StateStub
 {
     public function __construct(public readonly string $value)
     {

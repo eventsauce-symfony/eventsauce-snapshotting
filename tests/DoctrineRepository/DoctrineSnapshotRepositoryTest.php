@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\DoctrineRepository;
 
-use Andreo\EventSauce\Doctrine\Migration\SnapshotSchemaBuilder;
+use Andreo\EventSauce\Doctrine\Migration\DefaultSnapshotSchemaBuilder;
 use Andreo\EventSauce\Snapshotting\ConstructingSnapshotStateSerializer;
 use Andreo\EventSauce\Snapshotting\DoctrineSnapshotRepository;
 use Andreo\EventSauce\Snapshotting\SnapshotState;
@@ -64,7 +64,7 @@ final class DoctrineSnapshotRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $snapshotSchemaBuilder = new SnapshotSchemaBuilder();
+        $snapshotSchemaBuilder = new DefaultSnapshotSchemaBuilder();
         $this->aggregateRootId = DummyAggregateId::create();
         $this->connection = DriverManager::getConnection(
             [

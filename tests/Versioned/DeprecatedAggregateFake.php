@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\VersionedSnapshotting;
+namespace Tests\Versioned;
 
 use Andreo\EventSauce\Snapshotting\AggregateRootWithVersionedSnapshotting;
 use Andreo\EventSauce\Snapshotting\VersionedSnapshottingBehaviour;
@@ -10,21 +10,26 @@ use EventSauce\EventSourcing\AggregateRootBehaviour;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 
-class AggregateFake implements AggregateRootWithVersionedSnapshotting
+class DeprecatedAggregateFake implements AggregateRootWithVersionedSnapshotting
 {
     use AggregateRootBehaviour;
     use VersionedSnapshottingBehaviour;
 
-    public string $value = 'new';
+    public string $value = 'deprecated';
 
-    protected function createSnapshotState(): StateStub
+    public static function create(AggregateRootId $id): self
     {
-        return new StateStub($this->value);
+        return new self($id);
+    }
+
+    protected function createSnapshotState(): DeprecatedStateStub
+    {
+        return new DeprecatedStateStub($this->value);
     }
 
     protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting
     {
-        assert($state instanceof StateStub);
+        assert($state instanceof DeprecatedStateStub);
 
         $new = new self($id);
         $new->value = $state->value;
@@ -34,6 +39,6 @@ class AggregateFake implements AggregateRootWithVersionedSnapshotting
 
     public static function getSnapshotVersion(): int|string
     {
-        return 2;
+        return 1;
     }
 }
