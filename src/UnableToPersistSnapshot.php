@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Andreo\EventSauce\Snapshotting\Exception;
+namespace Andreo\EventSauce\Snapshotting;
 
 use EventSauce\EventSourcing\EventSauceException;
 use RuntimeException;

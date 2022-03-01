@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting;
 
-use Andreo\EventSauce\Snapshotting\Exception\UnableToPersistSnapshot;
-use Andreo\EventSauce\Snapshotting\Exception\UnableToRetrieveSnapshot;
 use Doctrine\DBAL\Connection;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\Snapshot;
