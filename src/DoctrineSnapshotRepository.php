@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting;
 
-use Andreo\EventSauce\Snapshotting\Exception\UnableToPersistSnapshotException;
-use Andreo\EventSauce\Snapshotting\Exception\UnableToRetrieveSnapshotException;
+use Andreo\EventSauce\Snapshotting\Exception\UnableToPersistSnapshot;
+use Andreo\EventSauce\Snapshotting\Exception\UnableToRetrieveSnapshot;
 use Doctrine\DBAL\Connection;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\Snapshot;
@@ -43,7 +43,7 @@ final class DoctrineSnapshotRepository implements SnapshotRepository
                 ]
             );
         } catch (Throwable $exception) {
-            throw UnableToPersistSnapshotException::dueTo(previous: $exception);
+            throw UnableToPersistSnapshot::dueTo(previous: $exception);
         }
     }
 
@@ -63,21 +63,17 @@ final class DoctrineSnapshotRepository implements SnapshotRepository
             if (false === $result = $builder->executeQuery()->fetchAssociative()) {
                 return null;
             }
-        } catch (Throwable $exception) {
-            throw UnableToRetrieveSnapshotException::dueTo(previous: $exception);
-        }
 
-        /** @var int $aggregateRootVersion */
-        $aggregateRootVersion = $result['aggregate_root_version'];
-        /** @var string $state */
-        $state = $result['state'];
+            /** @var int $aggregateRootVersion */
+            $aggregateRootVersion = $result['aggregate_root_version'];
+            /** @var string $state */
+            $state = $result['state'];
 
-        try {
             /** @var array<string, array<mixed>> $payload */
             $payload = json_decode($state, true, 512, JSON_THROW_ON_ERROR);
             $state = $this->serializer->unserialize($payload);
-        } catch (Throwable) {
-            return null;
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveSnapshot::dueTo(previous: $exception);
         }
 
         return new Snapshot(

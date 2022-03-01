@@ -8,10 +8,10 @@ use EventSauce\EventSourcing\EventSauceException;
 use RuntimeException;
 use Throwable;
 
-class UnableToRetrieveSnapshotException extends RuntimeException implements EventSauceException
+final class UnableToPersistSnapshot extends RuntimeException implements EventSauceException
 {
     public static function dueTo(string $reason = '', Throwable $previous = null): self
     {
-        return new self("Unable to retrieve messages. {$reason}", 0, $previous);
+        return new self("Unable to persist snapshot. {$reason}", 0, $previous);
     }
 }
