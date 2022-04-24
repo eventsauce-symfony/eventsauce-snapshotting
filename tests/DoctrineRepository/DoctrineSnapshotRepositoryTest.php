@@ -68,9 +68,8 @@ final class DoctrineSnapshotRepositoryTest extends TestCase
         $this->aggregateRootId = DummyAggregateId::create();
         $this->connection = DriverManager::getConnection(
             [
-                'dbname' => 'eventsauce_snapshot',
-                'user' => 'username',
-                'password' => 'pswd',
+                'dbname' => 'es_snapshot',
+                'user' => 'root',
                 'host' => 'mysql',
                 'port' => 3306,
                 'driver' => 'pdo_mysql',

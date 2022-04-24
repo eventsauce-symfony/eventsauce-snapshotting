@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker exec -it eventsauce_snapshot_php /bin/bash
+docker exec -it es_snapshot_php /bin/bash

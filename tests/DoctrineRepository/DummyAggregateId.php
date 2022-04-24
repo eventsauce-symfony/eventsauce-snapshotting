@@ -18,7 +18,7 @@ class DummyAggregateId implements AggregateRootId
         return $this->id;
     }
 
-    public static function fromString(string $aggregateRootId): self
+    public static function fromString(string $aggregateRootId): static
     {
         return new self($aggregateRootId);
     }
