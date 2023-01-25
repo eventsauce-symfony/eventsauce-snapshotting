@@ -1,4 +1,4 @@
-## eventsauce-snapshotting
+## eventsauce-snapshotting 3.0
 
 Extended snapshot components for EventSauce
 
@@ -10,117 +10,109 @@ Extended snapshot components for EventSauce
 ```bash
 composer require andreo/eventsauce-snapshotting
 ```
+
+#### Previous versions doc
+
+- [2.0](https://github.com/eventsauce-symfony/eventsauce-snapshotting/tree/2.0.0)
+
 ### Requirements
 
-- PHP ^8.1
+- PHP >=8.2
 - Doctrine Dbal ^3.1
 
 ### Doctrine snapshot repository
 
-By default, EventSauce only provides a memory repository 
-for storing snapshots.
-This library provides a repository to be stored in the 
-database by doctrine.
-
-#### Usage
-
 ```php
-use Andreo\EventSauce\Snapshotting\DoctrineSnapshotRepository;
+use Andreo\EventSauce\Snapshotting\Repository\Doctrine\DoctrineSnapshotRepository;
 
 new DoctrineSnapshotRepository(
     connection: $connection, // Doctrine\DBAL\Connection
     tableName: $tableName,
-    serializer: $serializer, // Andreo\EventSauce\Snapshotting\SnapshotStateSerializer
+    serializer: $serializer, // Andreo\EventSauce\Snapshotting\Serializer\SnapshotStateSerializer
     uuidEncoder: $uuidEncoder // EventSauce\UuidEncoding\UuidEncoder
 )
 ```
 
 ### Versioning
 
-When your aggregate root evolves, so must your snapshots. 
-A good practise is to version your snapshots.
-Storing a version along with your snapshot allows you to 
-filter out any outdated ones when trying to fetch 
-your aggregate root
-
-```php
-use Andreo\EventSauce\Snapshotting\AggregateRootWithVersionedSnapshotting;
-
-interface AggregateRootWithVersionedSnapshotting extends AggregateRootWithSnapshotting
-{
-    public static function getSnapshotVersion(): int|string;
-}
-```
-
-#### Usage
-
-Aggregate
-```php
-use EventSauce\EventSourcing\AggregateRootBehaviour;
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
-
-final class SomeAggregate implements AggregateRootWithVersionedSnapshotting
-{
-    use AggregateRootBehaviour;
-    use VersionedSnapshottingBehaviour; // dedicated trait
-
-    private string $foo;
-    private string $bar;
-
-    /**
-     *  If you change the snapshot model, 
-     *  remember to up version
-     */
-    protected function createSnapshotState(): SnapshotStateV2
-    {
-        return new SnapshotStateV2($this->foo, $this->bar);
-    }
-
-    public static function getSnapshotVersion(): int|string
-    {
-        return 2;
-    }
-    
-    protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting
-    {
-        assert($state instanceof SnapshotStateV2);
-        
-        // do something
-    }
-}
-```
 Repository
 
 ```php
-use Andreo\EventSauce\Snapshotting\AggregateRootRepositoryWithVersionedSnapshotting;
+use Andreo\EventSauce\Snapshotting\Repository\Versioned\AggregateRootRepositoryWithVersionedSnapshotting;
 
 new AggregateRootRepositoryWithVersionedSnapshotting(
     aggregateRootClassName: $aggregateRootClassName,
     messageRepository: $messageRepository
-    snapshotRepository: $snapshotRepository // EventSauce\EventSourcing\AggregateRootRepository
+    regularRepository: $regularRepository, // EventSauce\EventSourcing\AggregateRootRepository
+    snapshotVersionInflector: $snapshotVersionInflector, // Andreo\EventSauce\Snapshotting\Repository\Versioned\SnapshotVersionInflector
+    snapshotVersionComparator: $snapshotVersionComparator // Andreo\EventSauce\Snapshotting\Repository\Versioned\SnapshotVersionComparator
 );
 ```
 
-### Store strategy
+Versioned Snapshot State
 
 ```php
+
+use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshotState;
+
+final class FooSnapshotStateV2 implements VersionedSnapshotState {
+
+    public static function getSnapshotVersion(): int|string|object
+    {
+        return 2;
+    }
+}
+
+```
+Example of aggregate
+
+```php
+
+use EventSauce\EventSourcing\AggregateRootBehaviour;
+use EventSauce\EventSourcing\AggregateRootId;
+use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshottingBehaviour;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 
-interface CanStoreSnapshotStrategy
+final class FooAggregate implements AggregateRootWithSnapshotting
 {
-    public function canStore(AggregateRootWithSnapshotting $aggregateRoot): bool;
+    use AggregateRootBehaviour;
+    use VersionedSnapshottingBehaviour;
+
+    // Create snapshot method must have return type hint of VersionedSnapshotState implementation (with default SnapshotVersionInflector)
+    protected function createSnapshotState(): FooSnapshotStateV2
+    {
+        return new FooSnapshotStateV2();
+    }
+
+    protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting
+    {
+        assert($state instanceof FooSnapshotStateV2);
+    }
 }
 ```
 
-#### Every n event
+### Conditional Strategy
 
 ```php
-use Andreo\EventSauce\Snapshotting\AggregateRootRepositoryWithSnapshottingAndStoreStrategy;
-use Andreo\EventSauce\Snapshotting\EveryNEventCanStoreSnapshotStrategy;
+use Andreo\EventSauce\Snapshotting\Repository\Conditional\ConditionalSnapshotStrategy;
 
-new AggregateRootRepositoryWithSnapshottingAndStoreStrategy(
+interface ConditionalSnapshotStrategy
+{
+    public function canStoreSnapshot(AggregateRootWithSnapshotting $aggregateRoot): bool;
+}
+```
+
+#### Built-in strategies
+
+Every n event
+
+```php
+
+use Andreo\EventSauce\Snapshotting\Repository\Conditional\AggregateRootRepositoryWithConditionalSnapshot;
+use Andreo\EventSauce\Snapshotting\Repository\Conditional\EveryNEventConditionalSnapshotStrategy;
+
+new AggregateRootRepositoryWithConditionalSnapshot(
     regularRepository: $regularRepository, // EventSauce\EventSourcing\Snapshotting\AggregateRootRepositoryWithSnapshotting
-    canStoreSnapshotStrategy: new EveryNEventCanStoreSnapshotStrategy(numberOfEvents: 200) // or other implementation of Andreo\EventSauce\Snapshotting\CanStoreSnapshotStrategy
+    conditionalSnapshotStrategy: new EveryNEventConditionalSnapshotStrategy(numberOfEvents: 200) # or your implementation
 );
 ```

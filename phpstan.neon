@@ -1,4 +1,6 @@
 parameters:
     level: max
     paths:
-        - src
+        - Aggregate
+        - Repository
+        - Serializer
