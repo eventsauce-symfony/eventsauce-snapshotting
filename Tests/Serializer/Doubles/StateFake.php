@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting\Tests\Serializer\Doubles;
 
+use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshotState;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
-final readonly class StateFake implements SerializablePayload
+final readonly class StateFake implements SerializablePayload, VersionedSnapshotState
 {
     public function __construct(
         public string $foo = 'foo',
@@ -28,5 +29,10 @@ final readonly class StateFake implements SerializablePayload
             $payload['foo'],
             $payload['bar']
         );
+    }
+
+    public static function getSnapshotVersion(): int|string|object
+    {
+        return 1;
     }
 }

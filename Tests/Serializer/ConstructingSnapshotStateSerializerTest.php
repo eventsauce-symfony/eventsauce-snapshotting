@@ -42,6 +42,7 @@ final class ConstructingSnapshotStateSerializerTest extends TestCase
         $this->assertObjectHasAttribute('headers', $state);
         $this->assertArrayHasKey(Header::CREATED_AT->value, $state->headers);
         $this->assertArrayHasKey(Header::STATE_TYPE->value, $state->headers);
+        $this->assertSame(1, $state->payload::getSnapshotVersion());
     }
 
     public function serializer(): ConstructingSnapshotStateSerializer
