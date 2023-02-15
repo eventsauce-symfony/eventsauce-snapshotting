@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting\Tests\Repository\Versioned;
 
-use Andreo\EventSauce\Aggregate\Tests\DummyAggregateId;
-use Andreo\EventSauce\Snapshotting\Aggregate\SnapshotState;
 use Andreo\EventSauce\Snapshotting\Repository\Versioned\AggregateRootRepositoryWithVersionedSnapshotting;
+use Andreo\EventSauce\Snapshotting\Tests\Doubles\AggregateIdFake;
 use Andreo\EventSauce\Snapshotting\Tests\Repository\Versioned\Doubles\DeprecatedAggregateFake;
 use Andreo\EventSauce\Snapshotting\Tests\Repository\Versioned\Doubles\NewAggregateFake;
 use EventSauce\EventSourcing\AggregateRootId;
@@ -51,7 +50,7 @@ final class AggregateVersionedSnapshottingTest extends AggregateRootTestCase
 
     protected function newAggregateRootId(): AggregateRootId
     {
-        return DummyAggregateId::fromString('foo-uuid');
+        return AggregateIdFake::fromString('foo-uuid');
     }
 
     protected function aggregateRootClassName(): string

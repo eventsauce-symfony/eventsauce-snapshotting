@@ -35,11 +35,12 @@ final class ConstructingSnapshotStateSerializerTest extends TestCase
         $this->assertArrayHasKey(Header::STATE_TYPE->value, $payload['headers']);
 
         $state = $serializer->unserialize($payload);
-        $this->assertObjectHasAttribute('payload', $state);
+        $this->assertTrue(property_exists($state, 'payload'));
+        $this->assertTrue(property_exists($state, 'headers'));
         $this->assertInstanceOf(StateFake::class, $state->payload);
-        $this->assertObjectHasAttribute('foo', $state->payload);
-        $this->assertObjectHasAttribute('bar', $state->payload);
-        $this->assertObjectHasAttribute('headers', $state);
+        $this->assertTrue(property_exists($state->payload, 'foo'));
+        $this->assertTrue(property_exists($state->payload, 'bar'));
+
         $this->assertArrayHasKey(Header::CREATED_AT->value, $state->headers);
         $this->assertArrayHasKey(Header::STATE_TYPE->value, $state->headers);
         $this->assertSame(1, $state->payload::getSnapshotVersion());

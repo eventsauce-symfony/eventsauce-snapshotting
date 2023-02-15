@@ -7,6 +7,7 @@ namespace Andreo\EventSauce\Snapshotting\Tests\Repository\Conditional;
 use Andreo\EventSauce\Aggregate\Tests\DummyAggregateId;
 use Andreo\EventSauce\Snapshotting\Repository\Conditional\AggregateRootRepositoryWithConditionalSnapshot;
 use Andreo\EventSauce\Snapshotting\Repository\Conditional\EveryNEventConditionalSnapshotStrategy;
+use Andreo\EventSauce\Snapshotting\Tests\Doubles\AggregateIdFake;
 use Andreo\EventSauce\Snapshotting\Tests\Repository\Conditional\Doubles\ConditionalAggregateFake;
 use Andreo\EventSauce\Snapshotting\Tests\Repository\Conditional\Doubles\NumberFakeIncremented;
 use EventSauce\EventSourcing\AggregateRootId;
@@ -90,7 +91,7 @@ final class ConditionalSnapshotStoreStrategyTest extends AggregateRootTestCase
 
     protected function newAggregateRootId(): AggregateRootId
     {
-        return DummyAggregateId::create();
+        return AggregateIdFake::create();
     }
 
     protected function aggregateRootClassName(): string

@@ -18,7 +18,7 @@
         "php": ">=8.2",
         "doctrine/dbal": "^3.5",
         "eventsauce/eventsauce": "^3.0",
-        "eventsauce/uuid-encoding": "^0.3"
+        "eventsauce/uuid-encoding": "^0.4"
     },
     "require-dev": {
         "andreo/eventsauce-aggregate": "dev-main",

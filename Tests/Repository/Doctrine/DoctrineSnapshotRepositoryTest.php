@@ -8,6 +8,7 @@ use Andreo\EventSauce\Aggregate\Tests\DummyAggregateId;
 use Andreo\EventSauce\Snapshotting\Aggregate\SnapshotState;
 use Andreo\EventSauce\Snapshotting\Repository\Doctrine\DoctrineSnapshotRepository;
 use Andreo\EventSauce\Snapshotting\Serializer\SnapshotStateSerializer;
+use Andreo\EventSauce\Snapshotting\Tests\Doubles\AggregateIdFake;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Result;
@@ -31,13 +32,13 @@ final class DoctrineSnapshotRepositoryTest extends TestCase
 
         $repository->persist($snapshot);
 
-        $snapshot = $repository->retrieve(DummyAggregateId::fromString(self::UUID));
+        $snapshot = $repository->retrieve(AggregateIdFake::fromString(self::UUID));
         $this->assertEquals($snapshot->aggregateRootVersion(), $snapshot->aggregateRootVersion());
     }
 
     public function getSnapshots(): array
     {
-        $id = DummyAggregateId::fromString(self::UUID);
+        $id = AggregateIdFake::fromString(self::UUID);
         return [
             [
                 new Snapshot(
