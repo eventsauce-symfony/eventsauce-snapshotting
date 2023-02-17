@@ -11,6 +11,7 @@ use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionType;
+use Stringable;
 
 final readonly class InflectVersionFromReturnedTypeOfSnapshotStateCreationMethod implements SnapshotVersionInflector
 {
@@ -21,7 +22,7 @@ final readonly class InflectVersionFromReturnedTypeOfSnapshotStateCreationMethod
     /**
      * @param class-string<AggregateRootWithSnapshotting> $aggregateRootClassName
      */
-    public function snapshotVersion(string $aggregateRootClassName): int|string|object
+    public function snapshotVersion(string $aggregateRootClassName): int|string|Stringable
     {
         try {
             $createSnapshotStateReflection = new ReflectionMethod($aggregateRootClassName, $this->createSnapshotStateMethod);

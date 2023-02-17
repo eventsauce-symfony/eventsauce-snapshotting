@@ -44,11 +44,11 @@ final readonly class ConstructingSnapshotStateSerializer implements SnapshotStat
         $stateType = $payload['headers'][Header::STATE_TYPE->value];
         /** @var class-string $className */
         $className = $this->classNameInflector->typeToClassName($stateType);
-        $event = $this->payloadSerializer->unserializePayload($className, $payload['payload']);
+        $statePayload = $this->payloadSerializer->unserializePayload($className, $payload['payload']);
 
         /** @var array<string, int|string|array<mixed>|bool|float> $headers */
         $headers = $payload['headers'];
 
-        return SnapshotState::create($event, $headers);
+        return SnapshotState::create($statePayload, $headers);
     }
 }

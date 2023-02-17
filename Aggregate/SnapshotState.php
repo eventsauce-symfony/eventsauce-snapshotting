@@ -6,6 +6,7 @@ namespace Andreo\EventSauce\Snapshotting\Aggregate;
 
 use Andreo\EventSauce\Snapshotting\Serializer\Header;
 use DateTimeImmutable;
+use Stringable;
 
 final class SnapshotState
 {
@@ -24,9 +25,20 @@ final class SnapshotState
     /**
      * @param array<string, int|string|array<mixed>|bool|float> $headers
      */
-    public static function create(object $state, array $headers = []): self
+    public static function create(object $payload, array $headers = []): self
     {
-        return new self($state, $headers);
+        if ($payload instanceof VersionedSnapshotState) {
+            $snapshotVersion = $payload::getSnapshotVersion();
+            if ($snapshotVersion instanceof Stringable) {
+                $snapshotVersion = $snapshotVersion->__toString();
+            }
+            $headers[Header::VERSION->value] = $snapshotVersion;
+        }
+
+        return new self(
+            $payload,
+            $headers
+        );
     }
 
     public function withCreatedAt(DateTimeImmutable $createdAt): self
@@ -50,10 +62,12 @@ final class SnapshotState
         return $clone;
     }
 
-    public function version(): int|string|object
+    public function version(): int|string
     {
         if ($this->payload instanceof VersionedSnapshotState) {
-            return $this->payload::getSnapshotVersion();
+            $version = $this->header(Header::VERSION->value);
+            assert(is_int($version) || is_string($version));
+            return $version;
         }
 
         throw SnapshotIsNotVersioned::fromPayload($this->payload);

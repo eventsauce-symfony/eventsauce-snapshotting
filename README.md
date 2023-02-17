@@ -29,7 +29,8 @@ new DoctrineSnapshotRepository(
     connection: $connection, // Doctrine\DBAL\Connection
     tableName: $tableName,
     serializer: $serializer, // Andreo\EventSauce\Snapshotting\Serializer\SnapshotStateSerializer
-    uuidEncoder: $uuidEncoder // EventSauce\UuidEncoding\UuidEncoder
+    uuidEncoder: $uuidEncoder, // EventSauce\UuidEncoding\UuidEncoder
+    tableSchema: $tableSchema // Andreo\EventSauce\Snapshotting\Repository\Table\SnapshotTableSchema
 )
 ```
 
@@ -54,10 +55,11 @@ Versioned Snapshot State
 ```php
 
 use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshotState;
+use Stringable;
 
 final class FooSnapshotStateV2 implements VersionedSnapshotState {
 
-    public static function getSnapshotVersion(): int|string|object
+    public static function getSnapshotVersion(): int|string|Stringable
     {
         return 2;
     }

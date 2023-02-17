@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Andreo\EventSauce\Snapshotting\Tests\Repository\Versioned\Doubles;
 
 use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshotState;
+use Stringable;
 
 final readonly class DeprecatedSnapshotStateDummy implements VersionedSnapshotState
 {
@@ -12,7 +13,7 @@ final readonly class DeprecatedSnapshotStateDummy implements VersionedSnapshotSt
     {
     }
 
-    public static function getSnapshotVersion(): int|string
+    public static function getSnapshotVersion(): int|string|Stringable
     {
         return 1;
     }

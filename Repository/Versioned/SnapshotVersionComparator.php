@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting\Repository\Versioned;
 
+use Stringable;
+
 interface SnapshotVersionComparator
 {
-    public function compare(int|string|object $versionA, int|string|object $versionB): bool;
+    public function compare(int|string|Stringable $currentVersion, int|string $stateVersion): bool;
 }

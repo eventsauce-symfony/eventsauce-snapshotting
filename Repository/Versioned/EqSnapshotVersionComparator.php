@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting\Repository\Versioned;
 
+use Stringable;
+
 final class EqSnapshotVersionComparator implements SnapshotVersionComparator
 {
-    public function compare(object|int|string $versionA, object|int|string $versionB): bool
+    public function compare(int|string|Stringable $currentVersion, int|string $stateVersion): bool
     {
-        return $versionA === $versionB;
+        return $currentVersion === $stateVersion;
     }
 }

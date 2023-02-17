@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting\Tests\Repository\Doctrine;
 
-use Andreo\EventSauce\Aggregate\Tests\DummyAggregateId;
 use Andreo\EventSauce\Snapshotting\Aggregate\SnapshotState;
 use Andreo\EventSauce\Snapshotting\Repository\Doctrine\DoctrineSnapshotRepository;
 use Andreo\EventSauce\Snapshotting\Serializer\SnapshotStateSerializer;
@@ -85,8 +84,8 @@ final class DoctrineSnapshotRepositoryTest extends TestCase
             ]),
             'executeQuery' => $this->createConfiguredMock(Result::class, [
                 'fetchAssociative' => [
-                    'state' => '{}',
-                    'aggregate_root_version' => $aggregateVersion
+                    'payload' => '{}',
+                    'version' => $aggregateVersion
                 ]
             ])
         ]);
@@ -104,7 +103,7 @@ final class DoctrineSnapshotRepositoryTest extends TestCase
             $connection,
             'foo',
             $serializerMock,
-            new BinaryUuidEncoder()
+            new BinaryUuidEncoder(),
         );
     }
 }

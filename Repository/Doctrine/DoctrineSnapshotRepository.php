@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Andreo\EventSauce\Snapshotting\Repository\Doctrine;
 
 use Andreo\EventSauce\Snapshotting\Aggregate\SnapshotState;
+use Andreo\EventSauce\Snapshotting\Repository\Table\DefaultSnapshotTableSchema;
+use Andreo\EventSauce\Snapshotting\Repository\Table\SnapshotTableSchema;
 use Andreo\EventSauce\Snapshotting\Serializer\SnapshotStateSerializer;
 use Doctrine\DBAL\Connection;
 use EventSauce\EventSourcing\AggregateRootId;
@@ -25,6 +27,7 @@ final class DoctrineSnapshotRepository implements SnapshotRepository
         private readonly string $tableName,
         private readonly SnapshotStateSerializer $serializer,
         private readonly UuidEncoder $uuidEncoder,
+        private readonly SnapshotTableSchema $tableSchema = new DefaultSnapshotTableSchema(),
         private readonly int $jsonDepth = 512,
         private array $jsonEncodeFlags = [],
         private array $jsonDecodeFlags = []
@@ -46,13 +49,15 @@ final class DoctrineSnapshotRepository implements SnapshotRepository
         $payload = $this->serializer->serialize($state);
 
         try {
+            $rootId = $this->uuidEncoder->encodeString($snapshot->aggregateRootId()->toString());
             $jsonEncodeFlags = $this->computeJsonFlags($this->jsonEncodeFlags);
+            $statePayload = json_encode($payload, $jsonEncodeFlags, $this->jsonDepth);
             $this->connection->insert(
                 $this->tableName,
                 [
-                    'aggregate_root_id' => $this->uuidEncoder->encodeString($snapshot->aggregateRootId()->toString()),
-                    'aggregate_root_version' => $snapshot->aggregateRootVersion(),
-                    'state' => json_encode($payload, $jsonEncodeFlags, $this->jsonDepth),
+                    $this->tableSchema->aggregateRootIdColumn() => $rootId,
+                    $this->tableSchema->versionColumn() => $snapshot->aggregateRootVersion(),
+                    $this->tableSchema->payloadColumn() => $statePayload,
                 ]
             );
         } catch (Throwable $exception) {
@@ -67,10 +72,13 @@ final class DoctrineSnapshotRepository implements SnapshotRepository
     {
         $builder = $this->connection->createQueryBuilder();
         $builder
-            ->select('aggregate_root_version', 'state')
+            ->select(
+                sprintf('%s AS version', $this->tableSchema->versionColumn()),
+                sprintf('%s AS payload', $this->tableSchema->payloadColumn())
+            )
             ->from($this->tableName)
-            ->where('aggregate_root_id = :aggregate_root_id')
-            ->orderBy('aggregate_root_version', 'DESC')
+            ->where(sprintf('%s = :aggregate_root_id', $this->tableSchema->aggregateRootIdColumn()))
+            ->orderBy($this->tableSchema->versionColumn(), 'DESC')
             ->setMaxResults(1)
             ->setParameter('aggregate_root_id', $this->uuidEncoder->encodeString($id->toString()))
         ;
@@ -81,20 +89,20 @@ final class DoctrineSnapshotRepository implements SnapshotRepository
             }
 
             /** @var int<1, max> $aggregateRootVersion */
-            $aggregateRootVersion = $result['aggregate_root_version'];
-            /** @var string $state */
-            $state = $result['state'];
+            $aggregateRootVersion = $result['version'];
+            /** @var string $jsonPayload */
+            $jsonPayload = $result['payload'];
 
             $jsonDecodeFlags = $this->computeJsonFlags($this->jsonDecodeFlags);
-            /** @var array<string, array<mixed>> $payload */
-            $payload = json_decode(
-                $state,
+            /** @var array<string, array<mixed>> $statePayload */
+            $statePayload = json_decode(
+                $jsonPayload,
                 true,
                 $this->jsonDepth,
                 $jsonDecodeFlags
             );
 
-            $state = $this->serializer->unserialize($payload);
+            $state = $this->serializer->unserialize($statePayload);
         } catch (Throwable $exception) {
             throw UnableToRetrieveSnapshot::dueTo(previous: $exception);
         }

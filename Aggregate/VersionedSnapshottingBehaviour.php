@@ -16,7 +16,7 @@ use function assert;
  */
 trait VersionedSnapshottingBehaviour
 {
-    use SnapshottingBehaviour;
+    abstract protected function createSnapshotState(): VersionedSnapshotState;
 
     public function createSnapshot(): Snapshot
     {

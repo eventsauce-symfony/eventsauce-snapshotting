@@ -6,6 +6,7 @@ namespace Andreo\EventSauce\Snapshotting\Tests\Serializer\Doubles;
 
 use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshotState;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
+use Stringable;
 
 final readonly class StateFake implements SerializablePayload, VersionedSnapshotState
 {
@@ -31,7 +32,7 @@ final readonly class StateFake implements SerializablePayload, VersionedSnapshot
         );
     }
 
-    public static function getSnapshotVersion(): int|string|object
+    public static function getSnapshotVersion(): int|string|Stringable
     {
         return 1;
     }
