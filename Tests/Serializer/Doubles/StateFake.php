@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Andreo\EventSauce\Snapshotting\Tests\Serializer\Doubles;
 
-use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshotState;
+use Andreo\EventSauce\Snapshotting\Versioned\VersionedSnapshotState;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Stringable;
 

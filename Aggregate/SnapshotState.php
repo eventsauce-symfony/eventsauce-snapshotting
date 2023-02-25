@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Andreo\EventSauce\Snapshotting\Aggregate;
 
 use Andreo\EventSauce\Snapshotting\Serializer\Header;
+use Andreo\EventSauce\Snapshotting\Versioned\SnapshotIsNotVersioned;
+use Andreo\EventSauce\Snapshotting\Versioned\VersionedSnapshotState;
 use DateTimeImmutable;
 use Stringable;
 

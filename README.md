@@ -11,7 +11,7 @@ Extended snapshot components for EventSauce
 composer require andreo/eventsauce-snapshotting
 ```
 
-#### Previous versions doc
+#### Previous versions
 
 - [2.0](https://github.com/eventsauce-symfony/eventsauce-snapshotting/tree/2.0.0)
 
@@ -23,7 +23,7 @@ composer require andreo/eventsauce-snapshotting
 ### Doctrine snapshot repository
 
 ```php
-use Andreo\EventSauce\Snapshotting\Repository\Doctrine\DoctrineSnapshotRepository;
+use Andreo\EventSauce\Snapshotting\Doctrine\DoctrineSnapshotRepository;
 
 new DoctrineSnapshotRepository(
     connection: $connection, // Doctrine\DBAL\Connection
@@ -39,7 +39,7 @@ new DoctrineSnapshotRepository(
 Repository
 
 ```php
-use Andreo\EventSauce\Snapshotting\Repository\Versioned\AggregateRootRepositoryWithVersionedSnapshotting;
+use Andreo\EventSauce\Snapshotting\Versioned\AggregateRootRepositoryWithVersionedSnapshotting;
 
 new AggregateRootRepositoryWithVersionedSnapshotting(
     aggregateRootClassName: $aggregateRootClassName,
@@ -54,8 +54,7 @@ Versioned Snapshot State
 
 ```php
 
-use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshotState;
-use Stringable;
+use Andreo\EventSauce\Snapshotting\Versioned\VersionedSnapshotState;
 
 final class FooSnapshotStateV2 implements VersionedSnapshotState {
 
@@ -70,9 +69,9 @@ Example of aggregate
 
 ```php
 
+use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshottingBehaviour;
 use EventSauce\EventSourcing\AggregateRootBehaviour;
 use EventSauce\EventSourcing\AggregateRootId;
-use Andreo\EventSauce\Snapshotting\Aggregate\VersionedSnapshottingBehaviour;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 
 final class FooAggregate implements AggregateRootWithSnapshotting
@@ -80,7 +79,7 @@ final class FooAggregate implements AggregateRootWithSnapshotting
     use AggregateRootBehaviour;
     use VersionedSnapshottingBehaviour;
 
-    // Create snapshot method must have return type hint of VersionedSnapshotState implementation (with default SnapshotVersionInflector)
+    // Create snapshot method must have type hint of VersionedSnapshotState implementation (with default SnapshotVersionInflector)
     protected function createSnapshotState(): FooSnapshotStateV2
     {
         return new FooSnapshotStateV2();
@@ -96,7 +95,7 @@ final class FooAggregate implements AggregateRootWithSnapshotting
 ### Conditional Strategy
 
 ```php
-use Andreo\EventSauce\Snapshotting\Repository\Conditional\ConditionalSnapshotStrategy;
+
 
 interface ConditionalSnapshotStrategy
 {
@@ -110,8 +109,7 @@ Every n event
 
 ```php
 
-use Andreo\EventSauce\Snapshotting\Repository\Conditional\AggregateRootRepositoryWithConditionalSnapshot;
-use Andreo\EventSauce\Snapshotting\Repository\Conditional\EveryNEventConditionalSnapshotStrategy;
+use Andreo\EventSauce\Snapshotting\Conditional\AggregateRootRepositoryWithConditionalSnapshot;use Andreo\EventSauce\Snapshotting\Conditional\EveryNEventConditionalSnapshotStrategy;
 
 new AggregateRootRepositoryWithConditionalSnapshot(
     regularRepository: $regularRepository, // EventSauce\EventSourcing\Snapshotting\AggregateRootRepositoryWithSnapshotting

@@ -2,5 +2,7 @@ parameters:
     level: max
     paths:
         - Aggregate
-        - Repository
+        - Conditional
         - Serializer
+        - Doctrine
+        - Versioned
