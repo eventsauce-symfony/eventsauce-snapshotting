@@ -17,7 +17,7 @@ final class UnableInflectSnapshotVersion extends RuntimeException
     public static function invalidReturnedTypeOfSnapshotCreationMethod(string $createSnapshotStateMethod): self
     {
         return new self(
-            sprintf('Method %s should return type of VersionedSnapshotState implementation.', $createSnapshotStateMethod)
+            sprintf('Method %s should return a type of class that implements: %s.', $createSnapshotStateMethod, VersionedSnapshotState::class)
         );
     }
 }
